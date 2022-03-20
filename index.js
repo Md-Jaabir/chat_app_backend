@@ -49,6 +49,12 @@ app.get("/fetch",(req,res)=>{
 app.post("/create_room",async(req,res)=>{
 	let existedRoom=await room.find({roomname:req.body.roomname});
 	console.log(existedRoom)
+	if(existedRoom){
+		res.json({"Message":"error"})
+	}else{
+		let newRoom=new room(req.body)
+		newRoom.save();
+	}
 })
 
 app.listen(process.env.PORT);
