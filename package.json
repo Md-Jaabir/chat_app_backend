@@ -5,11 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-<<<<<<< HEAD
     "start": "node index.js"
-=======
-    "start":"node index.js"
->>>>>>> dc4351cabe166f915cb08e64d6de842a8acbd2d5
   },
   "keywords": [],
   "author": "",
