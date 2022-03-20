@@ -46,8 +46,15 @@ app.post("/send",(req,res)=>{
 })
 
 app.get("/fetch",async(req,res)=>{
-	let allmsgs=await msg.find(req.query);
-	res.json(allmsgs);
+	let theRoom=await room.find({roomname:req.query.roomname});
+	console.log(req.query.roomname,theRoom)
+	if(theRoom.toString()!=''){
+		let allmsgs=await msg.find(req.query);
+		res.json(allmsgs);
+	}else{
+		res.json({"Message":"error"});
+
+	}
 })
 
 app.post("/create_room",async(req,res)=>{
