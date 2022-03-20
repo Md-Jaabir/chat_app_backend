@@ -41,14 +41,13 @@ app.get("/",(req,res)=>{
 app.post("/send",(req,res)=>{
 	let newMsg=new msg(req.body);
 	newMsg.save()
-	// .catch((err)=>{
-	// 	res.json({"Message":"error"})
-	// });
+	res.json({"Message":"msg may be sent"})
 
 })
 
-app.get("/fetch",(req,res)=>{
-	res.json(req.query);
+app.get("/fetch",async(req,res)=>{
+	let allmsgs=await msg.find(req.query);
+	res.json(allmsgs);
 })
 
 app.post("/create_room",async(req,res)=>{
