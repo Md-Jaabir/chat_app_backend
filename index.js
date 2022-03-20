@@ -39,7 +39,8 @@ app.get("/",(req,res)=>{
 })
 
 app.post("/send",(req,res)=>{
-	
+	let newMsg=new msg(req.body);
+	newMsg.save();
 })
 
 app.get("/fetch",(req,res)=>{
