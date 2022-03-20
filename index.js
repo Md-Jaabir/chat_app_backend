@@ -40,7 +40,12 @@ app.get("/",(req,res)=>{
 
 app.post("/send",(req,res)=>{
 	let newMsg=new msg(req.body);
-	newMsg.save();
+	newMsg.save().then(()=>{
+		res.json({"Message":"success"})
+	}).catch((err)=>{
+		res.json({"Message":"error"})
+	});
+
 })
 
 app.get("/fetch",(req,res)=>{
