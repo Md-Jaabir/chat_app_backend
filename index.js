@@ -49,8 +49,8 @@ app.get("/fetch",(req,res)=>{
 app.post("/create_room",async(req,res)=>{
 	let existedRoom=await room.find({roomname:req.body.roomname});
 	console.log(existedRoom)
-	if(existedRoom){
-		res.json({"Message":"error"})
+	if(existedRoom!={}){
+		res.json(existedRoom)
 	}else{
 		let newRoom=new room(req.body)
 		newRoom.save();
