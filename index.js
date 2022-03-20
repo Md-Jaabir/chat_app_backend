@@ -46,8 +46,8 @@ app.post("/send",(req,res)=>{
 })
 
 app.get("/fetch",async(req,res)=>{
-	let theRoom=await room.find({roomname:req.query.roomname,password:req.query.password});
-	console.log(req.query.roomname,theRoom)
+	let theRoom=await room.find({roomname:req.query.roomname});
+	
 	if(theRoom.toString()!=''){
 		let allmsgs=await msg.find(req.query);
 		res.json(allmsgs);
@@ -59,7 +59,6 @@ app.get("/fetch",async(req,res)=>{
 
 app.post("/create_room",async(req,res)=>{
 	let existedRoom=await room.find({roomname:req.body.roomname});
-	console.log(existedRoom)
 	if(existedRoom.toString()!=''){
 		res.json(existedRoom)
 	}else{
