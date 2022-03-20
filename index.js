@@ -9,6 +9,7 @@ app.use(cors({origin:"*"}));
 dotenv.config();
 app.use(express.json());
 
+
 app.get("/",(req,res)=>{
 	res.json({"Message":"Hello"})
 })
