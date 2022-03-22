@@ -48,7 +48,7 @@ app.post("/send",(req,res)=>{
 app.get("/fetch",async(req,res)=>{
 	let theRoom=await room.find({roomname:req.query.roomname});
 	
-	if(theRoom.toString()!=''){
+	if(theRoom.toString()!='' && theRoom.password==req.query.password){
 		let allmsgs=await msg.find(req.query);
 		res.json(allmsgs);
 	}else{
