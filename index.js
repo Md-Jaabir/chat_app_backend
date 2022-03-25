@@ -47,44 +47,56 @@ app.post("/send",(req,res)=>{
 })
 
 app.post("/join_room",async(req,res)=>{
-	let expectedRoom = await room.find({roomname:req.body.roomname});
-	
-	let isPasswordCorrect=await bcrypt.compare(req.body.password,expectedRoom[0].password)
-	res.send(expectedRoom)
-	if (expectedRoom.toString()!='' && isPasswordCorrect) {
-		res.json({"Message":"success"});
-	}else{
+	try{
+		let expectedRoom = await room.find({roomname:req.body.roomname});
+		
+		let isPasswordCorrect=await bcrypt.compare(req.body.password,expectedRoom[0].password)
+		res.send(expectedRoom)
+		if (expectedRoom.toString()!='' && isPasswordCorrect) {
+			res.json({"Message":"success"});
+		}else{
+			res.json({"Message":"error"});
+		}
+	}catch{
 		res.json({"Message":"error"});
 	}
 })
 
 app.get("/fetch",async(req,res)=>{
-	let theRoom=await room.find({roomname:req.query.roomname});
-	let isPwdMatch= await bcrypt.compare(req.query.password,theRoom[0].password)
-	if(theRoom.toString()!='' && isPwdMatch){
-		let allmsgs=await msg.find(req.query);
-		res.json(allmsgs);
-	}else{
-		res.json({"Message":"error"});
+	try{
+		let theRoom=await room.find({roomname:req.query.roomname});
+		let isPwdMatch= await bcrypt.compare(req.query.password,theRoom[0].password)
+		if(theRoom.toString()!='' && isPwdMatch){
+			let allmsgs=await msg.find(req.query);
+			res.json(allmsgs);
+		}else{
+			res.json({"Message":"error"});
 
+		}
+	}catch{
+		res.json({"Message":"error"});
 	}
 });
 
 
 
 app.post("/create_room",async(req,res)=>{
-	let existedRoom=await room.find({roomname:req.body.roomname});
-	let hashedPwd=await bcrypt.hash(req.body.password,10);
-	if(existedRoom.toString()!=''){
-		res.json(existedRoom)
-	}else{
-		let newRoom=new room({
-			roomname:req.body.roomname,
-			password:hashedPwd,
-			authorname:req.body.authorname
-		})
-		newRoom.save();
-		res.json({"Message":"success"})
+	try{
+		let existedRoom=await room.find({roomname:req.body.roomname});
+		let hashedPwd=await bcrypt.hash(req.body.password,10);
+		if(existedRoom.toString()!=''){
+			res.json(existedRoom)
+		}else{
+			let newRoom=new room({
+				roomname:req.body.roomname,
+				password:hashedPwd,
+				authorname:req.body.authorname
+			})
+			newRoom.save();
+			res.json({"Message":"success"})
+		}
+	}catch{
+		res.json({"Message":"error"});
 	}
 })
 
