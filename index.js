@@ -51,11 +51,11 @@ app.post("/join_room",async(req,res)=>{
 	
 	let isPasswordCorrect=await bcrypt.compare(req.body.password,expectedRoom[0].password)
 	res.send(expectedRoom)
-	// if (expectedRoom.toString()!='' && isPasswordCorrect) {
-	// 	res.json({"Message":"success"});
-	// }else{
-	// 	res.json({"Message":"error"});
-	// }
+	if (expectedRoom.toString()!='' && isPasswordCorrect) {
+		res.json({"Message":"success"});
+	}else{
+		res.json({"Message":"error"});
+	}
 })
 
 app.get("/fetch",async(req,res)=>{
@@ -84,9 +84,12 @@ app.post("/create_room",async(req,res)=>{
 			authorname:req.body.authorname
 		})
 		newRoom.save();
-		res.json(newRoom);
-		// res.json({"Message":"success"})
+		res.json({"Message":"success"})
 	}
+})
+
+app.use((err,req,res,next)=>{
+	res.json({"Message":"error"});
 })
 
 app.listen(process.env.PORT);
