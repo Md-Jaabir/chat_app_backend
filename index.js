@@ -47,7 +47,7 @@ app.post("/send",(req,res)=>{
 })
 
 app.post("/join_room",async(req,res)=>{
-	let expectedRoom = room.find({roomname:req.body.roomname});
+	let expectedRoom = await room.find({roomname:req.body.roomname});
 	
 	let isPasswordCorrect=await bcrypt.compare(req.body.password,expectedRoom[0].password)
 	
