@@ -55,7 +55,9 @@ app.get("/fetch",async(req,res)=>{
 		res.json({"Message":"error"});
 
 	}
-})
+});
+
+
 
 app.post("/create_room",async(req,res)=>{
 	let existedRoom=await room.find({roomname:req.body.roomname});
