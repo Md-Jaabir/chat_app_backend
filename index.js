@@ -51,7 +51,7 @@ app.post("/join_room",async(req,res)=>{
 	
 	let isPasswordCorrect=await bcrypt.compare(req.body.password,expectedRoom[0].password)
 	
-	if (expectedRoom.toString()!="" && isPasswordCorrect) {
+	if (expectedRoom.toString()!='' && isPasswordCorrect) {
 		res.json({"Message":"success"});
 	}else{
 		res.json({"Message":"error"});
