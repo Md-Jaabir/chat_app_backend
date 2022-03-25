@@ -51,18 +51,16 @@ app.post("/join_room",async(req,res)=>{
 	
 	let isPasswordCorrect=await bcrypt.compare(req.body.password,expectedRoom[0].password)
 	
-	if (isPasswordCorrect) {
+	if (expectedRoom.toString()!="" && isPasswordCorrect) {
 		res.json({"Message":"success"});
 	}else{
 		res.json({"Message":"error"});
-
-	// res.json({"Message":isPasswordCorrect});
 	}
 })
 
 app.get("/fetch",async(req,res)=>{
 	let theRoom=await room.find({roomname:req.query.roomname});
-	let isPwdMatch= await bcrypt.compare(req.body.password,theRoom[0].password)
+	let isPwdMatch= await bcrypt.compare(req.query.password,theRoom[0].password)
 	if(theRoom.toString()!='' && isPwdMatch){
 		let allmsgs=await msg.find(req.query);
 		res.json(allmsgs);
