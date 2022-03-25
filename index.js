@@ -1,4 +1,5 @@
 const express=require("express");
+const bcrypt=require("bcrypt");
 const app=express();
 const mongoose =require("mongoose");
 const dotenv=require("dotenv");
@@ -45,6 +46,17 @@ app.post("/send",(req,res)=>{
 
 })
 
+app.post("/join_room",(req,res)=>{
+	let expectedRoom = room.find({roomname:req.body.roomname});
+	let isPasswordCorrect=bcrypt.compare(req.body.password,expectedRoom[0].password)
+	if (isPasswordCorrect) {
+		res.json({"Message":"success"});
+	}else{
+		res.json({"Message":"error"});
+
+	}
+})
+
 app.get("/fetch",async(req,res)=>{
 	let theRoom=await room.find({roomname:req.query.roomname});
 	
@@ -64,7 +76,11 @@ app.post("/create_room",async(req,res)=>{
 	if(existedRoom.toString()!=''){
 		res.json(existedRoom)
 	}else{
-		let newRoom=new room(req.body)
+		let newRoom=new room({
+			roomname:req.body.roomname,
+			password:bcrypt.hash(req.body.password,10),
+			authorname:req.body.authorname
+		})
 		newRoom.save();
 		res.json({"Message":"success"})
 	}
