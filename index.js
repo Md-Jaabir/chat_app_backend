@@ -60,7 +60,7 @@ app.post("/join_room",(req,res)=>{
 app.get("/fetch",async(req,res)=>{
 	let theRoom=await room.find({roomname:req.query.roomname});
 	
-	if(theRoom.toString()!='' && theRoom[0].password==req.query.password){
+	if(theRoom.toString()!='' && bcrypt.compare(req.body.password,theRoom[0].password)){
 		let allmsgs=await msg.find(req.query);
 		res.json(allmsgs);
 	}else{
