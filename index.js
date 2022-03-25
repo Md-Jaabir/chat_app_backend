@@ -46,9 +46,9 @@ app.post("/send",(req,res)=>{
 
 })
 
-app.post("/join_room",(req,res)=>{
+app.post("/join_room",async(req,res)=>{
 	let expectedRoom = room.find({roomname:req.body.roomname});
-	let isPasswordCorrect=bcrypt.compare(req.body.password,expectedRoom[0].password)
+	let isPasswordCorrect=await bcrypt.compare(req.body.password,expectedRoom[0].password)
 	if (isPasswordCorrect) {
 		res.json({"Message":"success"});
 	}else{
@@ -59,8 +59,8 @@ app.post("/join_room",(req,res)=>{
 
 app.get("/fetch",async(req,res)=>{
 	let theRoom=await room.find({roomname:req.query.roomname});
-	
-	if(theRoom.toString()!='' && bcrypt.compare(req.body.password,theRoom[0].password)){
+	let isPwdMatch= await bcrypt.compare(req.body.password,theRoom[0].password)
+	if(theRoom.toString()!='' && isPwdMatch){
 		let allmsgs=await msg.find(req.query);
 		res.json(allmsgs);
 	}else{
@@ -73,12 +73,13 @@ app.get("/fetch",async(req,res)=>{
 
 app.post("/create_room",async(req,res)=>{
 	let existedRoom=await room.find({roomname:req.body.roomname});
+	let hashedPwd=await bcrypt.hash(req.body.password,10);
 	if(existedRoom.toString()!=''){
 		res.json(existedRoom)
 	}else{
 		let newRoom=new room({
 			roomname:req.body.roomname,
-			password:bcrypt.hash(req.body.password,10),
+			password:hashedPwd,
 			authorname:req.body.authorname
 		})
 		newRoom.save();
